@@ -60,7 +60,7 @@ static VALUE bc_crypt(VALUE self, VALUE key, VALUE salt, VALUE cost) {
 			args.output = output;
 			args.key    = safeguarded;
 			args.salt   = RSTRING_PTR(salt);
-			ret = rb_thread_blocking_region(bcrypt_wrapper, &args, RUBY_UBF_IO, 0);
+			ret = rb_thread_call_without_gvl(bcrypt_wrapper, &args, RUBY_UBF_IO, 0);
 			if (ret != (VALUE) 0) {
 				return rb_str_new2(output);
 			} else {
